@@ -252,25 +252,38 @@ export function AddSendRequestByMessage<TBase extends ConnectorTUIBaseConstructo
     private async createIQLReadAttributeRequestItem() {
       const result = await prompts([
         {
+          message: "Type in the title of the item",
+          type: "text",
+          name: "title",
+        },
+        {
           message: "Type in the IQL query string",
           type: "text",
           name: "queryString",
         },
         {
-          message: "Type in the IQL query valueType fallback",
+          message: "Type in the Attribute valueType in case no results are found",
           type: "text",
           name: "valueType",
+        },
+        {
+          message: "Type in the Attribute tags (comma-separated) in case no results are found",
+          type: "text",
+          name: "tags",
+          initial: "",
         },
       ])
 
       const requestItem: ReadAttributeRequestItem = {
         "@type": "ReadAttributeRequestItem",
+        title: result.title,
         mustBeAccepted: true,
         query: {
           "@type": "IQLQuery",
           queryString: result.queryString,
           attributeCreationHints: {
             valueType: result.valueType,
+            tags: result.tags.split(","),
           },
         },
       }
